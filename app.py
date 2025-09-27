@@ -7,7 +7,7 @@ st.title("Mini Character AI")
 API_KEY = "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"
 
 # Crea l'oggetto InferenceApi per il modello Falcon 7B Instruct
-api = InferenceApi(repo_id="tiiuae/falcon-7b-instruct", token=API_KEY)
+api = InferenceApi(repo_id="google/flan-t5-large", token=API_KEY)
 
 # Mantieni la conversazione nello stato della sessione
 if "messages" not in st.session_state:
