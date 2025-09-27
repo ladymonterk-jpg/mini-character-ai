@@ -1,26 +1,27 @@
 import streamlit as st
-from transformers import pipeline
+from huggingface_hub import InferenceApi
 
 st.title("Mini Character AI")
 
-# Se vuoi usare la tua Hugging Face API Key
-# import os
-# os.environ["HUGGINGFACEHUB_API_TOKEN"] = "LA_TUA_API_KEY"
+# API Key Hugging Face
+API_KEY = "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"
 
-# Modello AI online
-chatbot = pipeline("text-generation", model="tiiuae/falcon-7b-instruct")
+# Crea l'oggetto InferenceApi per il modello Falcon 7B Instruct
+api = InferenceApi(repo_id="tiiuae/falcon-7b-instruct", token=API_KEY)
 
-# Chat
+# Mantieni la conversazione nello stato della sessione
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+# Input dell’utente
 user_input = st.text_input("Scrivi qualcosa:")
 
 if user_input:
-    response = chatbot(user_input, max_length=200, do_sample=True, temperature=0.7)
-    st.session_state.messages.append({"user": user_input, "ai": response[0]["generated_text"]})
+    # Chiamata all’AI tramite Hugging Face
+    response = api(inputs=user_input)
+    st.session_state.messages.append({"user": user_input, "ai": response})
 
-# Mostra conversazione
+# Mostra la conversazione
 for chat in st.session_state.messages:
     st.write("**Tu:**", chat["user"])
     st.write("**AI:**", chat["ai"])
